@@ -10,10 +10,12 @@ public class ThreadSend implements Runnable {
     private Socket soket;
     private int indexSoketu;
     public static int chunkSize = 50;
+    int pocetVlakien;
     
-    public ThreadSend(Socket soket, int indexSoketu) {
+    public ThreadSend(Socket soket, int indexSoketu, int pocetVlakien) {
         this.soket = soket;
         this.indexSoketu = indexSoketu;
+        this.pocetVlakien = pocetVlakien;
     }
 
     @Override
@@ -22,7 +24,7 @@ public class ThreadSend implements Runnable {
         try {
             RandomAccessFile raf = new RandomAccessFile(FileServer.FILE_TO_SEND, "rw");
             os = soket.getOutputStream();
-            int castSuboru = (int) Math.ceil((double)FileServer.FILE_TO_SEND.length()/FileClient.pocetVlakien);
+            int castSuboru = (int) Math.ceil((double)FileServer.FILE_TO_SEND.length()/pocetVlakien);
             int offset = castSuboru * indexSoketu;
             byte[] poleBajtov = new byte[chunkSize];
             raf.seek(offset);

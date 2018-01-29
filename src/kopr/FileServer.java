@@ -14,13 +14,30 @@ public class FileServer {
     private static ExecutorService executor;
     
     public static void main(String[] args) {
+        int pocetVlakien = 1;
+        try {
+            ServerSocket prvyServerSocket = new ServerSocket(1234);
+            Socket soket = prvyServerSocket.accept();
+            InputStream is = soket.getInputStream();
+            DataInputStream dis = new DataInputStream(is);
+            pocetVlakien = dis.read();
+            soket.close();
+            dis.close();
+            is.close();
+            prvyServerSocket.close();
+        } catch (IOException ex) {
+            Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
         try {
             ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
-            Socket[] sokety = new Socket[FileClient.pocetVlakien];
-            executor = Executors.newFixedThreadPool(FileClient.pocetVlakien);
+            Socket[] sokety = new Socket[pocetVlakien];
+            executor = Executors.newFixedThreadPool(pocetVlakien);
             for (int i = 0; i < sokety.length; i++) {
                 sokety[i] = serverSocket.accept();
-                executor.execute(new ThreadSend(sokety[i], i));
+                executor.execute(new ThreadSend(sokety[i], i, pocetVlakien));
             }
         } catch (IOException ex) {
             Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
