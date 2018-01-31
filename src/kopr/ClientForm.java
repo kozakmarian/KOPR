@@ -11,6 +11,7 @@ package kopr;
  */
 public class ClientForm extends javax.swing.JFrame {
 
+    
     /**
      * Creates new form ClientForm
      */
@@ -97,6 +98,10 @@ public class ClientForm extends javax.swing.JFrame {
             pocetVlakien = Integer.parseInt(pocetVlakienTextField.getText());
         }
         FileClient.pocetVlakien = pocetVlakien;
+        int[] velkosti = new int[pocetVlakien];
+        // TODO Swingworker
+        ProgressBarSwingWorker pbsw = new ProgressBarSwingWorker(kopirovanieProgressBar);
+        pbsw.execute();
         FileClient.spusti();
     }//GEN-LAST:event_SpustiButtonActionPerformed
 

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 public class FileServer {
     
-    public static File FILE_TO_SEND = new File("E:\\Poznamky.txt");
+    public static File FILE_TO_SEND = new File("E:\\SrdecneVasVitame.avi");
     public static int SERVER_PORT = 5000;
     public static String BROADCAST_IP = "localhost";
     private static ExecutorService executor;
@@ -28,9 +28,7 @@ public class FileServer {
         } catch (IOException ex) {
             Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+                
         try {
             ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
             Socket[] sokety = new Socket[pocetVlakien];

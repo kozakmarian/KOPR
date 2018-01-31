@@ -9,7 +9,7 @@ public class ThreadSend implements Runnable {
 
     private Socket soket;
     private int indexSoketu;
-    public static int chunkSize = 50;
+    public static int chunkSize = 1000000;
     int pocetVlakien;
     
     public ThreadSend(Socket soket, int indexSoketu, int pocetVlakien) {
@@ -29,7 +29,7 @@ public class ThreadSend implements Runnable {
             byte[] poleBajtov = new byte[chunkSize];
             raf.seek(offset);
             for (int i = 0; i < (int) Math.ceil((double) castSuboru/chunkSize); i++) {
-                System.out.println(offset);
+                //System.out.println(offset);
                 int precitalSom = raf.read(poleBajtov, 0, chunkSize);
                 offset = offset + precitalSom;
                 raf.seek(offset);

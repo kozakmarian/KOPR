@@ -9,10 +9,11 @@ import javax.swing.SwingUtilities;
 
 public class FileClient {
     
-    public static File FILE_TO_SAVE = new File("E:\\Kopr\\Copy.txt");
+    public static File FILE_TO_SAVE = new File("E:\\Kopr\\SrdecneVasVitame.avi");
     public static int pocetVlakien;
     private static ExecutorService executor;
     private static ClientForm cf;
+    public static FileController fileController;
     
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable(){
@@ -27,6 +28,7 @@ public class FileClient {
     
     public static void spusti(){
         try {
+            fileController = new FileController();
             Socket soket = new Socket(FileServer.BROADCAST_IP, 1234);
             OutputStream ou = soket.getOutputStream();
             ou.write(pocetVlakien);
@@ -35,8 +37,6 @@ public class FileClient {
         } catch (IOException ex) {
             Logger.getLogger(FileClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
         
         try {
             Socket[] klientskeSokety = new Socket[pocetVlakien];

@@ -26,12 +26,13 @@ public class ThreadReceive implements Runnable {
             byte[] poleBajtov = new byte[ThreadSend.chunkSize];
             raf.seek(offset);
             int precitalSom = is.read(poleBajtov, 0, poleBajtov.length);
-            System.out.println("som tu");
+            //System.out.println("som tu");
             while(precitalSom > 0){
-                System.out.println(offset);
+                //System.out.println(offset);
                 raf.seek(offset);
                 raf.write(poleBajtov, 0, precitalSom);
                 offset = offset + precitalSom;
+                FileClient.fileController.setPrecitaneZoSuboru(precitalSom);
                 precitalSom = is.read(poleBajtov, 0, poleBajtov.length);
             }
             System.out.println("koniec");
