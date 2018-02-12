@@ -5,6 +5,8 @@
  */
 package kopr;
 
+import java.io.File;
+
 /**
  *
  * @author Hej urcite
@@ -17,6 +19,19 @@ public class ClientForm extends javax.swing.JFrame {
      */
     public ClientForm() {
         initComponents();
+        File file = FileClient.suborNaZapisanie;
+        if (!file.exists()) {
+            SpustiButton.setVisible(true);
+            PokracujButton.setVisible(false);
+        } else {
+            ProgressBarSwingWorker.nastavProgressbar();
+            int pocetVlakien = FileServer.pocetVlakien;
+            FileClient.pocetVlakien = pocetVlakien;
+            ProgressBarSwingWorker pbsw = new ProgressBarSwingWorker(kopirovanieProgressBar);
+            pbsw.execute();
+            PokracujButton.setVisible(true);
+            SpustiButton.setVisible(false);
+        }
     }
 
     /**
@@ -34,6 +49,7 @@ public class ClientForm extends javax.swing.JFrame {
         pocetVlakienLabel = new javax.swing.JLabel();
         pocetVlakienTextField = new javax.swing.JTextField();
         kopirovanieProgressBar = new javax.swing.JProgressBar();
+        PokracujButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -45,32 +61,53 @@ public class ClientForm extends javax.swing.JFrame {
         });
 
         PrerusButton.setText("Preruš");
+        PrerusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PrerusButtonActionPerformed(evt);
+            }
+        });
 
         ZrusButton.setText("Zruš");
+        ZrusButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ZrusButtonActionPerformed(evt);
+            }
+        });
 
         pocetVlakienLabel.setText("Zadaj počet vlákien");
+
+        PokracujButton.setText("Pokracuj");
+        PokracujButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PokracujButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(kopirovanieProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(SpustiButton)
-                        .addGap(79, 79, 79)
-                        .addComponent(PrerusButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(ZrusButton)))
-                .addGap(34, 34, 34))
             .addGroup(layout.createSequentialGroup()
                 .addGap(79, 79, 79)
                 .addComponent(pocetVlakienLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pocetVlakienTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(72, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(kopirovanieProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(PokracujButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(SpustiButton)
+                        .addGap(28, 28, 28)
+                        .addComponent(PrerusButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ZrusButton)))
+                .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,7 +122,8 @@ public class ClientForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(SpustiButton)
                     .addComponent(PrerusButton)
-                    .addComponent(ZrusButton))
+                    .addComponent(ZrusButton)
+                    .addComponent(PokracujButton))
                 .addGap(51, 51, 51))
         );
 
@@ -99,11 +137,22 @@ public class ClientForm extends javax.swing.JFrame {
         }
         FileClient.pocetVlakien = pocetVlakien;
         int[] velkosti = new int[pocetVlakien];
-        // TODO Swingworker
         ProgressBarSwingWorker pbsw = new ProgressBarSwingWorker(kopirovanieProgressBar);
         pbsw.execute();
         FileClient.spusti();
     }//GEN-LAST:event_SpustiButtonActionPerformed
+
+    private void PrerusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrerusButtonActionPerformed
+        FileClient.prerus();
+    }//GEN-LAST:event_PrerusButtonActionPerformed
+
+    private void ZrusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZrusButtonActionPerformed
+        FileClient.zrus();
+    }//GEN-LAST:event_ZrusButtonActionPerformed
+
+    private void PokracujButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PokracujButtonActionPerformed
+        FileClient.pokracuj();
+    }//GEN-LAST:event_PokracujButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -111,6 +160,7 @@ public class ClientForm extends javax.swing.JFrame {
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton PokracujButton;
     private javax.swing.JButton PrerusButton;
     private javax.swing.JButton SpustiButton;
     private javax.swing.JButton ZrusButton;
