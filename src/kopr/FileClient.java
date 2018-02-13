@@ -72,13 +72,13 @@ public class FileClient {
             }
         } catch (IOException ex) {
             Logger.getLogger(FileClient.class.getName()).log(Level.SEVERE, null, ex);
-        } finally {
+        } /*finally {
             try {
                 soket.close();
             } catch (IOException ex) {
                 Logger.getLogger(FileClient.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
     }
     
     public static void pokracuj(){

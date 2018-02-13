@@ -25,6 +25,7 @@ public class FileServer {
                 sokety[i] = serverSocket.accept();
                 executor.execute(new ThreadSend(sokety[i], i, pocetVlakien, offsety));
             }
+            serverSocket.close();
         } catch (IOException ex) {
             Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,14 +61,14 @@ public class FileServer {
                         }
                         odosli(offsety);
                     }
-                } catch (EOFException e) {
-                    
+                } catch (SocketException e) {
+                    break;
                 }
             }
             soket.close();
             dis.close();
             is.close();
-            prvyServerSocket.close();
+            //prvyServerSocket.close();
         }
         //odosli();
     }
