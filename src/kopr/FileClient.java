@@ -41,6 +41,7 @@ public class FileClient {
     
     public static void spusti(){
         System.out.println("Zacinam prijimat subor");
+        int port = 0;
         try {
             if(sprava == 0){
                 offsety = new int[pocetVlakien];
@@ -53,8 +54,10 @@ public class FileClient {
             System.out.println("Klient sa pripaja na server");*/
             dos.writeInt(0);
             dos.writeInt(pocetVlakien);
-            soket.close();
+            //soket.close();
             //ou.close();
+            DataInputStream dis = new DataInputStream(soket.getInputStream());
+            port = dis.readInt();
         } catch (IOException ex) {
             Logger.getLogger(FileClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,11 +67,17 @@ public class FileClient {
             klientskeSokety = new Socket[pocetVlakien];
             executor = Executors.newFixedThreadPool(pocetVlakien);
             for (int i = 0; i < klientskeSokety.length; i++) {
-                klientskeSokety[i] = new Socket(FileServer.BROADCAST_IP, FileServer.SERVER_PORT);
+                klientskeSokety[i] = new Socket(FileServer.BROADCAST_IP, port);
                 executor.execute(new ThreadReceive(klientskeSokety[i], i, offsety));
             }
         } catch (IOException ex) {
             Logger.getLogger(FileClient.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                soket.close();
+            } catch (IOException ex) {
+                Logger.getLogger(FileClient.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     
@@ -76,11 +85,12 @@ public class FileClient {
         try {
             sprava = 1;
             System.out.println("Pokracujem v prijimani suboru");
-            // TODO odkial sa zobere velkost pola?
-            offsety = new int[pocetVlakien];
+            //offsety = new int[pocetVlakien];
             Scanner sc = null;
             try {
                 sc = new Scanner(suborNaZapisanie);
+                offsety = new int[sc.nextInt()];
+                pocetVlakien = offsety.length;
                 for (int i = 0; i < offsety.length; i++) {
                     offsety[i] = sc.nextInt();
                 }
@@ -107,6 +117,7 @@ public class FileClient {
             pw = new PrintWriter(suborNaZapisanie);
             System.out.println("zapisujem offsety");
             int[] offsety = fileController.getOffset();
+            pw.println(pocetVlakien);
             for (int i = 0; i < pocetVlakien; i++) {
                 pw.println(offsety[i]);
             }
@@ -115,6 +126,7 @@ public class FileClient {
         } finally {
             pw.close();
             cf.setVisible(false);
+            System.exit(1);
         }
     }
     
@@ -128,5 +140,6 @@ public class FileClient {
             suborNaZapisanie.delete();
         }
         cf.setVisible(false);
+        System.exit(1);
     }
 }

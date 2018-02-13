@@ -6,6 +6,10 @@
 package kopr;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,8 +29,21 @@ public class ClientForm extends javax.swing.JFrame {
             PokracujButton.setVisible(false);
         } else {
             ProgressBarSwingWorker.nastavProgressbar();
-            int pocetVlakien = FileServer.pocetVlakien;
-            FileClient.pocetVlakien = pocetVlakien;
+            /*int pocetVlakien = 0;
+            Scanner sc = null;
+            try {
+                sc = new Scanner(file);
+                while(sc.hasNextLine()){
+                    int offset = sc.nextInt();
+                    pocetVlakien++;
+                }
+                
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
+            } finally {
+                sc.close();
+            }
+            FileClient.pocetVlakien = pocetVlakien;*/
             ProgressBarSwingWorker pbsw = new ProgressBarSwingWorker(kopirovanieProgressBar);
             pbsw.execute();
             PokracujButton.setVisible(true);

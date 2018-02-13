@@ -13,9 +13,11 @@ public class FileServer {
     public static String BROADCAST_IP = "localhost";
     private static ExecutorService executor;
     public static int pocetVlakien;
+    public static DataOutputStream dos;
     
-    public static void odosli(int[] offsety) {                
+    public static void odosli(int[] offsety) throws IOException {                
         try {
+            dos.writeInt(SERVER_PORT);
             ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
             Socket[] sokety = new Socket[pocetVlakien];
             executor = Executors.newFixedThreadPool(pocetVlakien);
@@ -28,23 +30,26 @@ public class FileServer {
         }
     }
     
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         pocetVlakien = 1;
-        try {
-            ServerSocket prvyServerSocket = new ServerSocket(1234);
-            System.out.println("Cakam na pripojenie klienta");
+        ServerSocket prvyServerSocket = new ServerSocket(1234);
+        System.out.println("Cakam na pripojenie klienta");
+        while(true){
             Socket soket = prvyServerSocket.accept();
             System.out.println("Klient sa pripojil");
+            dos = new DataOutputStream(soket.getOutputStream());
             InputStream is = soket.getInputStream();
             DataInputStream dis = new DataInputStream(is);
             System.out.println("Zacinam komunikovat");
             while(soket.isConnected()){
                 try {
                     int sprava = dis.readInt();
+                    System.out.println(sprava);
                     if(sprava == 0){
                         System.out.println("Zacinam posielat subor");
                         pocetVlakien = dis.readInt();
                         odosli(new int[pocetVlakien]);
+                        System.out.println("skoncil som if");
                     }
                     if(sprava == 1){
                         System.out.println("Pokracujem v posielani suboru");
@@ -56,15 +61,13 @@ public class FileServer {
                         odosli(offsety);
                     }
                 } catch (EOFException e) {
-
+                    
                 }
             }
             soket.close();
             dis.close();
             is.close();
             prvyServerSocket.close();
-        } catch (IOException ex) {
-            Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         //odosli();
     }
