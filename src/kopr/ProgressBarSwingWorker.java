@@ -10,25 +10,34 @@ import javax.swing.SwingWorker;
 public class ProgressBarSwingWorker extends SwingWorker<Void, Integer>{
 
     private JProgressBar progressBar;
-    private static int sucetOffsetov;
 
     public ProgressBarSwingWorker(JProgressBar progressBar) {
         this.progressBar = progressBar;
         this.progressBar.setMinimum(0);
-        this.progressBar.setMaximum((int) FileServer.FILE_TO_SEND.length());
+        //this.progressBar.setMaximum((int) FileClient.velkostSuboru);
         this.progressBar.setStringPainted(true);
     }
     
     @Override
     protected Void doInBackground() throws Exception {
         int suma = 0;
+        int start = 0;
         File file = FileClient.suborNaZapisanie;
         if (file.exists()) {
-            suma = sucetOffsetov;
+            System.out.println("som v podmienke");
+            start = nastavProgressbar();
         }
-        while(!Thread.currentThread().isInterrupted() && suma < FileServer.FILE_TO_SEND.length()){
-            suma = FileClient.fileController.getPrecitaneZoSuboru();
-            publish(suma);
+        
+        while(FileClient.velkostSuboru == 0){
+            Thread.sleep(500);
+        }
+        this.progressBar.setMaximum((int) FileClient.velkostSuboru);
+        while((!Thread.currentThread().isInterrupted() && suma < FileClient.velkostSuboru)){
+            
+            if(FileClient.fileController != null){
+                suma = FileClient.fileController.getPrecitaneZoSuboru();
+            }
+            publish(suma + start);
             Thread.sleep(500);
         }
         return null;
@@ -36,28 +45,36 @@ public class ProgressBarSwingWorker extends SwingWorker<Void, Integer>{
 
     @Override
     protected void process(List<Integer> chunks) {
+        //System.out.println("process: " + chunks.get(chunks.size()-1));
         progressBar.setValue(chunks.get(chunks.size()-1));
     }
 
     @Override
     protected void done() {
-        progressBar.setValue(100);
+        System.out.println("done");
+        progressBar.setValue((int) FileClient.velkostSuboru);
     }
     
-    public static void nastavProgressbar() {
+    public int nastavProgressbar() {
         Scanner scanner = null;
         int sucet = 0;
         File file = FileClient.suborNaZapisanie;
-        if (!file.exists()) {
-            sucetOffsetov = 0;
-        }
         try {
+            //System.out.println("try");
             scanner = new Scanner(file);
+            int pocitadlo = 0;
             while (scanner.hasNextInt()) {
+                if (pocitadlo == 0){
+                    int pocetVlakien = scanner.nextInt();
+                    pocitadlo++;
+                }
+                //System.out.println("while");
                 sucet += scanner.nextInt();
             }
+            //System.out.println(sucet);
         } catch (FileNotFoundException e) {
-            sucetOffsetov = 0;
+            sucet = 0;
+            e.printStackTrace();
         } catch (Exception ex) {
             ex.printStackTrace();
         } finally {
@@ -65,6 +82,8 @@ public class ProgressBarSwingWorker extends SwingWorker<Void, Integer>{
                 scanner.close();
             }
         }
-        sucetOffsetov = sucet;
+        
+        //sucetOffsetov = sucet;
+        return sucet;
     }
 }

@@ -28,26 +28,13 @@ public class ClientForm extends javax.swing.JFrame {
             SpustiButton.setVisible(true);
             PokracujButton.setVisible(false);
         } else {
-            ProgressBarSwingWorker.nastavProgressbar();
-            /*int pocetVlakien = 0;
-            Scanner sc = null;
-            try {
-                sc = new Scanner(file);
-                while(sc.hasNextLine()){
-                    int offset = sc.nextInt();
-                    pocetVlakien++;
-                }
-                
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(ClientForm.class.getName()).log(Level.SEVERE, null, ex);
-            } finally {
-                sc.close();
-            }
-            FileClient.pocetVlakien = pocetVlakien;*/
-            ProgressBarSwingWorker pbsw = new ProgressBarSwingWorker(kopirovanieProgressBar);
-            pbsw.execute();
+            
             PokracujButton.setVisible(true);
             SpustiButton.setVisible(false);
+            
+            /*ProgressBarSwingWorker pbsw = new ProgressBarSwingWorker(kopirovanieProgressBar);
+            //pbsw.nastavProgressbar();
+            pbsw.execute();*/
         }
     }
 
@@ -154,9 +141,10 @@ public class ClientForm extends javax.swing.JFrame {
         }
         FileClient.pocetVlakien = pocetVlakien;
         int[] velkosti = new int[pocetVlakien];
+        FileClient.spusti();
         ProgressBarSwingWorker pbsw = new ProgressBarSwingWorker(kopirovanieProgressBar);
         pbsw.execute();
-        FileClient.spusti();
+        //FileClient.spusti();
     }//GEN-LAST:event_SpustiButtonActionPerformed
 
     private void PrerusButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PrerusButtonActionPerformed
@@ -168,6 +156,10 @@ public class ClientForm extends javax.swing.JFrame {
     }//GEN-LAST:event_ZrusButtonActionPerformed
 
     private void PokracujButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PokracujButtonActionPerformed
+        //FileClient.pokracuj();
+        ProgressBarSwingWorker pbsw = new ProgressBarSwingWorker(kopirovanieProgressBar);
+        //pbsw.nastavProgressbar();
+        pbsw.execute();
         FileClient.pokracuj();
     }//GEN-LAST:event_PokracujButtonActionPerformed
 

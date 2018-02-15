@@ -18,6 +18,7 @@ public class FileServer {
     public static void odosli(int[] offsety) throws IOException {                
         try {
             dos.writeInt(SERVER_PORT);
+            dos.writeLong(FILE_TO_SEND.length());
             ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
             Socket[] sokety = new Socket[pocetVlakien];
             executor = Executors.newFixedThreadPool(pocetVlakien);

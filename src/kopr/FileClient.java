@@ -21,6 +21,7 @@ public class FileClient {
     public static FileController fileController;
     public static CountDownLatch pocitadlo;
     private static int sprava;
+    public static long velkostSuboru;
     
     public static void main(String[] args) throws IOException {
         SwingUtilities.invokeLater(new Runnable(){
@@ -37,6 +38,7 @@ public class FileClient {
         dos = new DataOutputStream(ou);
         System.out.println("Klient sa pripaja na server");
         sprava = 0;
+        //fileController = new FileController();
     }
     
     public static void spusti(){
@@ -58,6 +60,8 @@ public class FileClient {
             //ou.close();
             DataInputStream dis = new DataInputStream(soket.getInputStream());
             port = dis.readInt();
+            velkostSuboru = dis.readLong();
+            //fileController = new FileController();
         } catch (IOException ex) {
             Logger.getLogger(FileClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -98,6 +102,7 @@ public class FileClient {
                 Logger.getLogger(FileClient.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 sc.close();
+                suborNaZapisanie.delete();
             }
             dos.writeInt(1);
             dos.writeInt(pocetVlakien);

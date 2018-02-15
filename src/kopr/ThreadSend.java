@@ -9,7 +9,7 @@ public class ThreadSend implements Runnable {
 
     private Socket soket;
     private int indexSoketu;
-    public static int chunkSize = 1000000;
+    public static int chunkSize = 5000;
     public static boolean boloPrerusene;
     int pocetVlakien;
     int[] offsety;
