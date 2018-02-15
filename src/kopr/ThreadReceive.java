@@ -23,7 +23,7 @@ public class ThreadReceive implements Runnable {
         try {
             RandomAccessFile raf = new RandomAccessFile(FileClient.FILE_TO_SAVE, "rw");
             is = soket.getInputStream();
-            int castSuboru = (int) Math.ceil((double)FileServer.FILE_TO_SEND.length()/FileClient.pocetVlakien);
+            int castSuboru = (int) Math.ceil((double)FileClient.velkostSuboru/FileClient.pocetVlakien);
             //int offset = castSuboru * indexSoketu;
             byte[] poleBajtov = new byte[ThreadSend.chunkSize];
             //raf.seek(offset);

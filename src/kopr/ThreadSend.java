@@ -9,7 +9,7 @@ public class ThreadSend implements Runnable {
 
     private Socket soket;
     private int indexSoketu;
-    public static int chunkSize = 5000;
+    public static int chunkSize = 4096;
     public static boolean boloPrerusene;
     int pocetVlakien;
     int[] offsety;
@@ -40,8 +40,9 @@ public class ThreadSend implements Runnable {
                 //offset = offset + precitalSom;
                 //raf.seek(offset);
                 os.write(poleBajtov, 0, precitalSom);
-                os.flush();
+                //os.flush();
             }
+            os.flush();
         } catch (IOException ex) {
             boloPrerusene = true;
             //System.out.println("vynimka");
